@@ -1,13 +1,18 @@
 #include <iostream>
+#include <algorithm>
 #include <webots/Robot.hpp>
 #include <webots/Motor.hpp>
 #include <webots/PositionSensor.hpp>
+#include <webots/Gyro.hpp>
+
+#include "motion.cpp"
 
 // All the webots classes are defined in the "webots" namespace
 using namespace webots;
 
-#define TIME_STEP 64
-#define MAX_SPEED 6.28
+#define TIME_STEP 32
+#define NORMAL_SPEED 5
+#define MAX_SPEED 7
 
 //prototyping functions
 void start_motors(Motor** motors, double speed, int mode);
@@ -26,7 +31,7 @@ int main(int argc, char **argv) {
 
   Motor* motors[2];
   PositionSensor* encoders[2];
-
+  Gyro* gyro = robot->getGyro("gyro");
 
   for (int i=0; i<2; i++){
     motors[i] = robot->getMotor(motor_names[i]);
@@ -37,7 +42,18 @@ int main(int argc, char **argv) {
     encoders[i]->enable(TIME_STEP);
   }
 
-  start_motors(motors, MAX_SPEED, 2);
+  gyro->enable(TIME_STEP);
+  bool left_rotate = true;
+  double angle_error = 1.5708;
+  double motor_speed;
+  double integral_rotate = 0;
+  double prev_angle_error = angle_error;
+  /*
+  double KP_rotate = 2.5;
+  double KI_rotate = 0;
+  double KD_rotate = 0.2;
+  */
+  //start_motors(motors, MAX_SPEED, 2);
 
   double limit = 1;
   double wheel_radius = 0.035; //35mm
@@ -55,6 +71,8 @@ int main(int argc, char **argv) {
   std::cout << initial_encoder_values[0] << " & " << initial_encoder_values[1] << std::endl;
   std::cout << encoders[0]->getValue() << " & " << encoders[0]->getValue() << std::endl;
   */
+  motion::init_turn(motors, -2*1.5708);
+
 
   while (robot->step(TIME_STEP) != -1) {
     if (saved_encoder_values == false){
@@ -64,18 +82,45 @@ int main(int argc, char **argv) {
       saved_encoder_values = true;
     }
 
+    if(motion::turn_flag){
+      /*
+      angle_error -= gyro->getValues()[1] * TIME_STEP * 0.001;
+      integral_rotate += angle_error;
+
+      motor_speed = KP_rotate * angle_error + KI_rotate * integral_rotate + KD_rotate * (angle_error - prev_angle_error);
+
+      prev_angle_error = angle_error;
+
+      start_motors(motors, std::min(motor_speed, (double)MAX_SPEED), 2);
+
+      if(std::abs(angle_error) <= 0.01){
+        left_rotate = false;
+        integral_rotate = 0;
+        stop_motors(motors);
+
+        std::cout << "Rotated angle error: " << angle_error << std::endl;
+      }
+
+      std::cout << "Rotated angle error: " << angle_error << std::endl;
+      */
+
+      motion::turn(motors, gyro);
+    }
+
+    //std::cout << gyro->getValues()[0] << " & " << gyro->getValues()[1] << " & " << gyro->getValues()[2] << std::endl;
+    /*
     std::cout << "Left Encoder Value: " << encoders[0]->getValue() - initial_encoder_values[0] << " & " << "Right Encoder Value: " << encoders[1]->getValue() - initial_encoder_values[1] << std::endl;
     std::cout << "Left Wheel Distance: " << ( encoders[0]->getValue() - initial_encoder_values[0] ) * wheel_radius << " & " << "Right Wheel Distance: " << ( encoders[1]->getValue() - initial_encoder_values[1] ) * wheel_radius << std::endl;
 
     if( ( encoders[0]->getValue() - initial_encoder_values[0] ) * wheel_radius >= limit && ( encoders[1]->getValue() - initial_encoder_values[1] ) * wheel_radius >= limit){
       stop_motors(motors);
     }
-
+    */
     //left_turn(motors, encoders, initial_encoder_values, pturn_left);
     //std::cout << encoders[0]->getValue() << " & " << encoders[0]->getValue() << std::endl;
   };
 
-  // Enter here exit cleanup code.
+  //Enter here exit cleanup code.
   delete robot;
   return 0;
 }
