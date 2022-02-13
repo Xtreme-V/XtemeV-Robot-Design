@@ -1,4 +1,4 @@
-#VRML_SIM R2020b utf8
+#VRML_SIM R2021a utf8
 WorldInfo {
   info [
     "Sample testing arena for final round of SLRC2021 university category"
@@ -11,8 +11,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.27650954075447975 0.8882445514489566 0.36682978435916114 4.321574357631453
-  position -5.871421332631445 4.554461084438339 -0.07907590576198423
+  orientation -0.4652617381788908 -0.735526382843947 -0.4924758421763008 1.9270279161706685
+  position -1.8625872541998896 2.269382202249346 -0.14155341297285395
 }
 DirectionalLight {
   direction 0 -1 -1
@@ -1144,8 +1144,6 @@ DEF XtremeV Robot {
   translation 0.819997 0.047405 0.9737
   rotation -0.00027549697937816393 0.9999999251467856 -0.0002716759796641781 1.5708099999999998
   children [
-    Gyro {
-    }
     DEF Hand_servo HingeJoint {
       jointParameters HingeJointParameters {
         axis -1 0 0
@@ -1938,7 +1936,7 @@ DEF XtremeV Robot {
     density -1
     mass 1.1
   }
-  controller "position_control_test"
+  controller "XtremeV_Main"
 }
 DEF shooting_arena_part_1 Transform {
   translation -2.02 -0.0035 -0.43
@@ -2121,8 +2119,8 @@ DEF shooting_arena_part_6 Solid {
   name "solid(8)"
 }
 DEF shooting_arena_part_7 Solid {
-  translation -1.075 0.0793948 -0.407424
-  rotation -1 0 0 0.349065
+  translation -1.095 0.0793948 -0.407424
+  rotation -1 0 0 0.34906500000000046
   children [
     Shape {
       appearance PBRAppearance {
@@ -2137,6 +2135,7 @@ DEF shooting_arena_part_7 Solid {
   name "solid(9)"
 }
 DEF shooting_arena_part_8 Solid {
+  translation -1.09 0.1275 -0.0254
   children [
     Shape {
       appearance PBRAppearance {
@@ -2144,7 +2143,7 @@ DEF shooting_arena_part_8 Solid {
         metalness 0
       }
       geometry Box {
-        size 0.1 0.1 0.1
+        size 0.03 0.05 0.35
       }
     }
   ]
