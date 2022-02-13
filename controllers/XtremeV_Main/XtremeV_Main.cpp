@@ -21,13 +21,15 @@ double prevError = 0;
 double integral = 0;
 
 //Gripper Lifter
-int target_lift=36;
+// int target_lift=36;
+int target_lift=100;
+
 
 //Main
 int main(int argc, char **argv) 
 {
 
-	Robot *robot = new Robot();
+        	Robot *robot = new Robot();
 	// init Motors
 	for (int i = 0; i < 2; i++)
 	{
@@ -70,35 +72,63 @@ int main(int argc, char **argv)
 	while (robot->step(TIME_STEP) != -1)
 	{   
 		//Line Following Block
-		IR_Values = lineFollow::getIRValues(irPanel);
-		cout << IR_Values << endl;
-		lineFollow::PID(motors, IR_Values, &integral, &prevError);
+		// double a = 1.5;
+		// motors[0] ->setVelocity(MAX_SPEED);
+		// motors[1] ->setVelocity(MAX_SPEED);
+
+		// IR_Values = lineFollow::getIRValues(irPanel);
+		// cout << IR_Values << endl;
+		// lineFollow::PID(motors, IR_Values, &integral, &prevError);
 
 		//Horizontal Move Control of the hand
-		if (current_hand_position<target_hand_position)
+		// current_hand_position+=1;
+		while (robot->step(TIME_STEP) != -1)
 		{
-			hand::Gripper(linear,1, current_hand_position);
-			current_hand_position+=1;
-		}
-		else if (current_hand_position>target_hand_position)
-		{
-			hand::Gripper(linear,-1, current_hand_position);
-			current_hand_position-=1;    
-		}
-			
-		//Gripper Lift up Control
-		if (counter<target_lift)
-		{
-			hand::Gripper_Lifter(servo,1,counter,target_lift);
-			counter++;
+			if (current_hand_position<target_hand_position)
+			{
+				hand::Gripper(linear,1, current_hand_position);
+				current_hand_position+=1;
+			}
+			else
+				break;
 		}
 
-		//Solenoid Control
-		if(state==1)
+		// hand::Gripper(linear,1,1);
+		// robot->step(300);
+		// hand::Gripper(linear,1,100);
+
+
+		// if (current_hand_position<target_hand_position)
+		// {
+		// 	hand::Gripper(linear,1, current_hand_position);
+		// 	current_hand_position+=1;
+		// }
+		// else if (current_hand_position>target_hand_position)
+		// {
+		// 	hand::Gripper(linear,-1, current_hand_position);
+		// 	current_hand_position-=1;    
+		// }
+			
+		//Gripper Lift up Control
+		while (robot->step(TIME_STEP) != -1)
 		{
-			hand::Solenoid(linear,state);
-			state=0;  
+			if (counter<target_lift)
+			{
+				hand::Gripper_Lifter(servo,1,counter,target_lift);
+				counter++;
+			}
+			else  
+				break;
 		}
+
+		cout << "end" << endl;
+		break;
+		//Solenoid Control
+		// if(state==1)
+		// {
+		// 	hand::Solenoid(linear,state);
+		// 	state=0;  
+		// }
 			
 	} 
 	// cleanup
