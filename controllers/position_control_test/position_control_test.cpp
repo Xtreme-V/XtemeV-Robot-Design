@@ -5,6 +5,8 @@
 #include <webots/PositionSensor.hpp>
 #include <webots/Gyro.hpp>
 
+#include "motion.cpp"
+
 // All the webots classes are defined in the "webots" namespace
 using namespace webots;
 
@@ -46,12 +48,12 @@ int main(int argc, char **argv) {
   double motor_speed;
   double integral_rotate = 0;
   double prev_angle_error = angle_error;
-
+  /*
   double KP_rotate = 2.5;
   double KI_rotate = 0;
   double KD_rotate = 0.2;
-
-  start_motors(motors, MAX_SPEED, 2);
+  */
+  //start_motors(motors, MAX_SPEED, 2);
 
   double limit = 1;
   double wheel_radius = 0.035; //35mm
@@ -69,6 +71,8 @@ int main(int argc, char **argv) {
   std::cout << initial_encoder_values[0] << " & " << initial_encoder_values[1] << std::endl;
   std::cout << encoders[0]->getValue() << " & " << encoders[0]->getValue() << std::endl;
   */
+  motion::init_turn(motors, -2*1.5708);
+
 
   while (robot->step(TIME_STEP) != -1) {
     if (saved_encoder_values == false){
@@ -78,7 +82,8 @@ int main(int argc, char **argv) {
       saved_encoder_values = true;
     }
 
-    if(left_rotate){
+    if(motion::turn_flag){
+      /*
       angle_error -= gyro->getValues()[1] * TIME_STEP * 0.001;
       integral_rotate += angle_error;
 
@@ -97,6 +102,9 @@ int main(int argc, char **argv) {
       }
 
       std::cout << "Rotated angle error: " << angle_error << std::endl;
+      */
+
+      motion::turn(motors, gyro);
     }
 
     //std::cout << gyro->getValues()[0] << " & " << gyro->getValues()[1] << " & " << gyro->getValues()[2] << std::endl;
@@ -112,7 +120,7 @@ int main(int argc, char **argv) {
     //std::cout << encoders[0]->getValue() << " & " << encoders[0]->getValue() << std::endl;
   };
 
-  // Enter here exit cleanup code.
+  //Enter here exit cleanup code.
   delete robot;
   return 0;
 }
