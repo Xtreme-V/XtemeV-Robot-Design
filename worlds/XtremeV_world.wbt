@@ -1143,6 +1143,8 @@ DEF XtremeV Robot {
   translation 0.819997 0.047405 0.9737
   rotation -0.00027549697937816393 0.9999999251467855 -0.0002716759796641781 1.57081
   children [
+    Gyro {
+    }
     DEF Hand_servo HingeJoint {
       jointParameters HingeJointParameters {
         axis -1 0 0
@@ -1935,5 +1937,5 @@ DEF XtremeV Robot {
     density -1
     mass 1.1
   }
-  controller "XtremeV_Main"
+  controller "position_control_test"
 }
