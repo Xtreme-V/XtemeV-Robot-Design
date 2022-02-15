@@ -26,7 +26,9 @@ double prevError = 0;
 double integral = 0;
 
 //Gripper Lifter
-int target_lift=36;
+// int target_lift=36;
+int target_lift=100;
+
 
 //state variable
 int overall_state = 1;
@@ -42,7 +44,7 @@ void unit(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSenso
 int main(int argc, char **argv) 
 {
 
-	Robot *robot = new Robot();
+        	Robot *robot = new Robot();
 	// init Motors
 	for (int i = 0; i < 2; i++)
 	{
@@ -139,101 +141,4 @@ int main(int argc, char **argv)
 	// cleanup
 	delete robot;
 	return 0;	
-}
-
-void forward(Robot* robot, Motor** motors, PositionSensor** pSensors, int distance)
-{
-  double lambda = distance/35;
-  double ang= pSensors[0] -> getValue();
-  double ang1=ang;
-  cout<<ang1<<endl;
-  while (robot->step(TIME_STEP) != -1)
-  {
-    cout<<ang1<<endl;
-    ang1=pSensors[0] -> getValue();
-    if (ang1-ang>lambda)////-//////////////////////[12.5 change kranw]
-    {
-      for(int k=0;k<2;k++)
-      {
-        motors[k]->setVelocity(0);
-      }
-      return;
-    }
-      for(int k=0;k<2;k++)
-      {
-        motors[k]->setVelocity(MAX_SPEED);
-      }
-  }
-}
-
-void stop(Motor** motors)
-{
-  for(int k=0;k<2;k++)
-  {
-    motors[k]->setVelocity(0);
-  }
-}
-
-bool is_wall(DistanceSensor** dSensors, char x)
-{
-  if (x=='l')
-  {
-    if (dSensors[0]->getValue()<4000)
-    {
-      return true;
-    }
-    return false;
-  }
-  else if (x=='f')
-  {
-    if (dSensors[2]->getValue()<4000)
-    {
-      return true;
-    }
-    return false;
-  }
-  else
-  {
-    if (dSensors[1]->getValue()<4000)
-    {
-      return true;
-    }
-    return false;
-  }
-}
-
-void turning(Robot* robot, Motor** motors, Gyro* gyro, double angle){
-	motion::init_turn(motors, angle);
-	while(robot->step(TIME_STEP) != -1){
-		if (motion::turn_flag){
-			motion::turn(motors, gyro);
-		}
-		else{
-			break;
-		}
-	}
-}
-
-void unit(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, Gyro* gyro)
-{
-  forward(robot, motors, pSensors, 370);
-  if (!(is_wall(dSensors, 'l')))
-  {
-    turning(robot, motors, gyro, 90 * 3.14/180);
-    return;
-  }
-  else if (!(is_wall(dSensors, 'f')))
-  {
-    return;
-  }
-  else if (!(is_wall(dSensors, 'r')))
-  {
-    turning(robot, motors, gyro, -90 * 3.14/180);
-    return;
-  } 
-  else
-  {
-    turning(robot, motors, gyro, 180 * 3.14/180);
-    return;
-  } 
 }
