@@ -59,16 +59,48 @@ void motion::stop_motors(Motor** motors){
   }
 }
 
-void motion::forward(Robot* robot, Motor** motors, PositionSensor** pSensors, int distance)
+double motion::increase_speed(double ref_speed, double offset){
+  return std::min( std::max( ref_speed + offset, -1*(double)MAX_SPEED ), (double)MAX_SPEED );
+}
+
+void motion::forward(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, int distance)
 {
-  double lambda = distance/35;
+  //variables for PID
+  double Kp = 10;
+  double Ki = 0;
+  double Kd = 0;
+
+  double acc_error = 0;
+  double prev_error = 0; 
+
+  double error; //positive if the left distance sensor is larger than the right distance sensor
+  double correction;
+  double left_motor_speed;
+  double right_motor_speed;
+  
+  double lambda = distance/35; //wheel radius = 35 mm
   double ang= pSensors[0] -> getValue();
   double ang1=ang;
+
   std::cout << ang1 << std::endl;
+
   while (robot->step(TIME_STEP) != -1)
   {
+    
+    error = ( dSensors[0]->getValue() - dSensors[1]->getValue() ) / 4000;
+    acc_error += error;
+
+    correction = Kp * error + Ki * acc_error + Kd * (error - prev_error); 
+    prev_error = error; 
+    
+    left_motor_speed = motion::increase_speed(NORMAL_SPEED, -correction);
+    right_motor_speed = motion::increase_speed(NORMAL_SPEED, correction);
+    
+    std::cout << "Left wheel speed: " << left_motor_speed << " & " << "Right wheel speed: " << right_motor_speed << std::endl; 
+    
     std::cout << ang1 << std::endl;
     ang1 = pSensors[0] -> getValue();
+
     if (ang1-ang>lambda)////-//////////////////////[12.5 change kranw]
     {
       for(int k=0;k<2;k++)
@@ -77,10 +109,14 @@ void motion::forward(Robot* robot, Motor** motors, PositionSensor** pSensors, in
       }
       return;
     }
-      for(int k=0;k<2;k++)
-      {
-        motors[k]->setVelocity(MAX_SPEED);
-      }
+    
+    motors[0]->setVelocity(left_motor_speed);
+    motors[1]->setVelocity(right_motor_speed);
+    
+  /*
+   motors[0]->setVelocity(MAX_SPEED);
+   motors[1]->setVelocity(MAX_SPEED);
+   */
   }
 }
 
@@ -134,7 +170,7 @@ void motion::turning(Robot* robot, Motor** motors, Gyro* gyro, double angle){
 
 void motion::unit(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, Gyro* gyro)
 {
-  motion::forward(robot, motors, pSensors, 370);
+  motion::forward(robot, motors, pSensors, dSensors, 370);
   if (!(motion::is_wall(dSensors, 'l')))
   {
     motion::turning(robot, motors, gyro, 90 * 3.14/180);
@@ -154,4 +190,37 @@ void motion::unit(Robot* robot, Motor** motors, PositionSensor** pSensors, Dista
     motion::turning(robot, motors, gyro, 180 * 3.14/180);
     return;
   } 
+}
+
+void motion::align_to_walls(Robot* robot, Motor** motors, DistanceSensor** dSensors){
+  double Kp = 1.2;
+  double Ki = 0;
+  double Kd = 0;
+
+  double acc_error = 0;
+  double prev_error = 0; 
+
+  double error; //positive if the left distance sensor is larger than the right distance sensor
+  double correction;
+  double left_motor_speed;
+  double right_motor_speed;
+
+  while (robot->step(TIME_STEP) != -1){
+    std::cout << dSensors[0]->getValue() << " and " << dSensors[1]->getValue() << std::endl;
+    error = ( dSensors[0]->getValue() - dSensors[1]->getValue() ) / 4000;
+    acc_error += error;
+
+    correction = Kp * error + Ki * acc_error + Kd * (error - prev_error); 
+    prev_error = error; 
+    
+    left_motor_speed = NORMAL_SPEED + correction;
+    right_motor_speed = NORMAL_SPEED - correction;
+
+    motors[0]->setVelocity(left_motor_speed);
+    motors[1]->setVelocity(right_motor_speed);
+
+    if (std::abs(error) <= 0.01){
+      break;
+    }
+  }
 }

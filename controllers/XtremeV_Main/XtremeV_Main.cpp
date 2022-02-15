@@ -31,7 +31,7 @@ int target_lift=100;
 
 
 //state variable
-int overall_state = 1;
+int overall_state = 0;
 
 //function init
 void forward(Robot* robot);
@@ -44,7 +44,7 @@ void unit(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSenso
 int main(int argc, char **argv) 
 {
 
-        	Robot *robot = new Robot();
+	Robot *robot = new Robot();
 	// init Motors
 	for (int i = 0; i < 2; i++)
 	{
@@ -103,6 +103,14 @@ int main(int argc, char **argv)
 			IR_Values = lineFollow::getIRValues(irPanel);
 			cout << IR_Values << endl;
 			lineFollow::PID(motors, IR_Values, &integral, &prevError);
+
+			if (IR_Values == "00000000" && dSensors[0]->getValue() < 4000 && dSensors[1]->getValue() < 4000){
+				std::cout << dSensors[0]->getValue() << " & " << dSensors[1]->getValue() << " : " << "Line following sequence is finished" << std::endl;
+				overall_state = 1;
+				motion::forward(robot, motors, pSensors, dSensors, 185);
+				break;
+			}
+
 			break;
 		
 		case 1:

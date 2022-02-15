@@ -7,7 +7,7 @@ namespace lineFollow
         string panelVals = "";
         for (int i = 0; i < 8; i++)
         {
-            if (irPanel[i] -> getValue() > IR_THRESHOLD) // For Balck
+            if (irPanel[i] -> getValue() > IR_THRESHOLD) // For Black
                 panelVals += "0";
             else  //For White
                 panelVals += "1"; 

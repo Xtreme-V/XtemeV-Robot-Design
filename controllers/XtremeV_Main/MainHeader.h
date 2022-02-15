@@ -17,9 +17,9 @@
 #define NORMAL_SPEED 5
 #define MAX_SPEED 7
 #define IR_THRESHOLD 250
-#define KP 1.7
+#define KP 1.0
 #define KI 0
-#define KD 0.1
+#define KD 0.5
 
 #define print(x)  cout << #x": " << x << "\n";
 
@@ -54,11 +54,13 @@ namespace motion{
     void turn(Motor** motors, Gyro* gyro);
     void start_motors(Motor** motors, double speed, int mode);
     void stop_motors(Motor** motors);
-    void forward(Robot* robot, Motor** motors, PositionSensor** pSensors, int distance);
+    void forward(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, int distance);
     void stop(Motor** motors);
     bool is_wall(DistanceSensor** dSensors, char x);
     void turning(Robot* robot, Motor** motors, Gyro* gyro, double angle);
     void unit(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, Gyro* gyro);
+    void align_to_walls(Robot* robot, Motor** motors, DistanceSensor** dSensors);
+    double increase_speed(double ref_speed, double offset);
 }
 
 #endif
