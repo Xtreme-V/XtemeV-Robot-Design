@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
   std::cout << initial_encoder_values[0] << " & " << initial_encoder_values[1] << std::endl;
   std::cout << encoders[0]->getValue() << " & " << encoders[0]->getValue() << std::endl;
   */
-  motion::init_turn(motors, -2*1.5708);
+  motion::init_turn(motors, -1.5708);
 
 
   while (robot->step(TIME_STEP) != -1) {
@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
 
       motion::turn(motors, gyro);
     }
-
+    motion::init_turn(motors, 1.5708);
     //std::cout << gyro->getValues()[0] << " & " << gyro->getValues()[1] << " & " << gyro->getValues()[2] << std::endl;
     /*
     std::cout << "Left Encoder Value: " << encoders[0]->getValue() - initial_encoder_values[0] << " & " << "Right Encoder Value: " << encoders[1]->getValue() - initial_encoder_values[1] << std::endl;

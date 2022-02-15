@@ -17,11 +17,7 @@ void motion::turn(Motor** motors, Gyro* gyro){
 
     motion::prev_angle_error = motion::angle_error;
 
-    if (std::abs(motor_speed) >= std::abs(MAX_SPEED)){
-      motor_speed = MAX_SPEED * motor_speed / std::abs(motor_speed);
-    }
-
-    motion::start_motors(motors, motor_speed, 2);
+    motion::start_motors(motors, std::min(motor_speed, (double)MAX_SPEED), 2);
 
     if(std::abs(motion::angle_error) <= 0.01){
         motion::turn_flag = false;

@@ -29,11 +29,11 @@ void motion::turn(Motor** motors, Gyro* gyro){
         motion::stop_motors(motors);
     }
 
-    std::cout << "Rotated angle error: " << angle_error << std::endl;
+    //std::cout << "Rotated angle error: " << angle_error << std::endl;
 }
 
 void motion::start_motors(Motor** motors, double speed, int mode){
-  std::cout << speed << std::endl;
+  //std::cout << speed << std::endl;
 
   //straight
   if (mode == 0){
