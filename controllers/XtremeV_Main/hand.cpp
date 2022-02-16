@@ -2,7 +2,7 @@
 
 namespace hand
 {
-    void SetGripperPosition(Robot* robot, int target_hand_position, int *current_hand_position, Motor **linear)
+    void SetGripperPosition(Robot* robot, Motor **linear, int target_hand_position, int *current_hand_position)
     {
 
         while (robot->step(TIME_STEP) != -1)

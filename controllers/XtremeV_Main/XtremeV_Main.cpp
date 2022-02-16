@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 			break;
 		
 		case 2:
-			hand::SetGripperPosition(robot, target_hand_position, &current_hand_position, linear);
+			hand::SetGripperPosition(robot, linear, target_hand_position, &current_hand_position);
 				
 			//Gripper Lift up Control
 			// if (counter<target_lift)

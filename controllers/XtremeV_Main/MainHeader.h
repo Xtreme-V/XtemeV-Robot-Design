@@ -34,7 +34,7 @@ namespace lineFollow
 
 namespace hand
 {
-    void SetGripperPosition(Robot* robot, int target_hand_position, int *current_hand_position, Motor **linear);
+    void SetGripperPosition(Robot* robot, Motor **linear, int target_hand_position, int *current_hand_position);
     void Gripper( Motor **linear, int dir, int current_pos);
     void Gripper_Lifter(Motor *servo, bool iflift,int counter,int target_lift);
     void Solenoid(Motor **linear, int state);
