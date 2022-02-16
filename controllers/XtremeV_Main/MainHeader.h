@@ -41,6 +41,7 @@ namespace hand
     void Gripper( Motor **linear, int dir, int current_pos);
     void Gripper_Lifter(Motor *servo, bool iflift,int counter,int target_lift);
     void Solenoid(Motor **linear, int state);
+    void liftHand(Motor *servo,Robot *robot, bool iflift,int target_lift);
 }
 
 namespace motion{

@@ -2,6 +2,23 @@
 
 namespace hand
 {
+    void liftHand(Motor *servo,Robot *robot, bool iflift,int target_lift)
+    {   
+        int count = 1;
+        while (robot->step(TIME_STEP) != -1)
+        {
+            if (count<target_lift)
+            {
+                hand::Gripper_Lifter(servo,iflift,count,target_lift);
+                count++;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+        
     void SetGripperPosition(Robot* robot, Motor **linear, int target_hand_position, int *current_hand_position)
     {
 
