@@ -31,7 +31,7 @@ int target_lift=100;
 
 
 //state variable
-int overall_state = 0;
+int overall_state = 2;
 
 //function init
 void forward(Robot* robot);
@@ -119,31 +119,21 @@ int main(int argc, char **argv)
 			break;
 		
 		case 2:
-			//Horizontal Move Control of the hand
-			if (current_hand_position<target_hand_position)
-			{
-				hand::Gripper(linear,1, current_hand_position);
-				current_hand_position+=1;
-			}
-			else if (current_hand_position>target_hand_position)
-			{
-				hand::Gripper(linear,-1, current_hand_position);
-				current_hand_position-=1;    
-			}
+			hand::SetGripperPosition(robot, target_hand_position, &current_hand_position, linear);
 				
 			//Gripper Lift up Control
-			if (counter<target_lift)
-			{
-				hand::Gripper_Lifter(servo,1,counter,target_lift);
-				counter++;
-			}
+			// if (counter<target_lift)
+			// {
+			// 	hand::Gripper_Lifter(servo,1,counter,target_lift);
+			// 	counter++;
+			// }
 
-			//Solenoid Control
-			if(state==1)
-			{
-				hand::Solenoid(linear,state);
-				state=0;  
-			}		
+			// //Solenoid Control
+			// if(state==1)
+			// {
+			// 	hand::Solenoid(linear,state);
+			// 	state=0;  
+			// }		
 		}
 	} 
 	// cleanup

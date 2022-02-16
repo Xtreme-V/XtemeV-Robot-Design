@@ -2,6 +2,31 @@
 
 namespace hand
 {
+    void SetGripperPosition(Robot* robot, int target_hand_position, int *current_hand_position, Motor **linear)
+    {
+
+        while (robot->step(TIME_STEP) != -1)
+        {   
+            
+            //Horizontal Move Control of the hand
+            if (*current_hand_position<target_hand_position)
+            {
+                Gripper(linear,1, *current_hand_position);
+                *current_hand_position+=1;
+            }
+            else if (*current_hand_position>target_hand_position)
+            {
+                Gripper(linear,-1, *current_hand_position);
+                *current_hand_position-=1;    
+            } 
+            else
+            {
+                break;
+            }      
+
+        } 
+
+    }  
     void Gripper(Motor **linear, int dir, int current_pos)
     {
         linear[0]->setPosition(current_pos*0.001+dir*0.001);
