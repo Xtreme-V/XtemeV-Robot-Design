@@ -1,20 +1,6 @@
 // XtremeV_controller
-#include <webots/Robot.hpp>
-#include <webots/DistanceSensor.hpp>
-#include <webots/Motor.hpp>
-#include <webots/Camera.hpp>
-#include <webots/Display.hpp>
-#include <webots/ImageRef.hpp>
-#include <string>
-#include <vector>
-#include <webots/PositionSensor.hpp>
-//constants
-#define TIME_STEP 32
-#define NORMAL_SPEED 5
-#define MAX_SPEED 7
-#define IR_THRESHOLD 250
-//macros
-#define print(x)     cout << #x": " << x << "\n";
+#include "MainHeader.h"
+#include "motion.cpp"
 
 // All the webots classes are defined in the "webots" namespace
 using namespace webots;
@@ -31,9 +17,6 @@ char psNames[2][15] = { "left_encoder", "right_encoder" };
 //Overall
 int Overall_state=0;
 //PID
-const double KP = 1.7;
-const double KI = 0;
-const double KD = 0.1;
 double prevError = 0;
 double error = 0;
 double integral = 0;
@@ -121,7 +104,7 @@ int main(int argc, char **argv)
         PID(IR_Values);
         break;
     case 1:
-        //Maze 
+        //Maze
         break;
     case 3:
         //Horizontal Move Control of the hand

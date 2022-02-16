@@ -66,7 +66,7 @@
 ###-----------------------------------------------------------------------------
 
 ### Do not modify: this includes Webots global Makefile.include
-CXX_SOURCES = XtremeV_Main.cpp lineFollow.cpp hand.cpp
+###CXX_SOURCES = XtremeV_Main.cpp lineFollow.cpp hand.cpp
 null :=
 space := $(null) $(null)
 WEBOTS_HOME_PATH=$(subst $(space),\ ,$(strip $(subst \,/,$(WEBOTS_HOME))))

@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 #include <webots/PositionSensor.hpp>    
+#include "MainHeader.h"
+#include "motion.cpp"
 //constants
 #define TIME_STEP 32
 #define NORMAL_SPEED 5
@@ -35,12 +37,12 @@ DistanceSensor* dSensors[3];
 DistanceSensor* irPanel[8];
 PositionSensor *pSensors[2];
 Robot *robot = new Robot();
+Gyro* gyro;
 //function init
 void forward();
 void stop();
 bool is_wall(char x);
 void unit();
-void turning(int theta);
 
 int main(int argc, char **argv) {
 
@@ -83,6 +85,9 @@ int main(int argc, char **argv) {
     pSensors[i]->enable(TIME_STEP);
   }
   
+  gyro = robot->getGyro("gyro");
+  gyro->enable(TIME_STEP);
+
   //variables
   // double ir_val;  // used for printing IR values
   string IR_Values;
@@ -91,7 +96,6 @@ int main(int argc, char **argv) {
   while (robot->step(TIME_STEP) != -1)
   {
     unit();
-    break;
   };
 
   delete robot;
@@ -99,17 +103,17 @@ int main(int argc, char **argv) {
 }
 
 
-void forward(distance)
+void forward(int distance)
 {
-  theta=diatance/35
-  float ang=pSensors[0] -> getValue();
-  float ang1=ang;
+  double lambda = distance/35;
+  double ang=pSensors[0] -> getValue();
+  double ang1=ang;
   cout<<ang1<<endl;
   while (robot->step(TIME_STEP) != -1)
   {
-    cout<<ang1<<endl;
+    //cout<<ang1<<endl;
     ang1=pSensors[0] -> getValue();
-    if (ang1-ang>10.5714)////-//////////////////////[12.5 change kranw]
+    if (ang1-ang>lambda)////-//////////////////////[12.5 change kranw]
     {
       for(int k=0;k<2;k++)
       {
@@ -136,7 +140,7 @@ bool is_wall(char x)
 {
   if (x=='l')
   {
-    if (dSensors[0]->getValue()<4000)
+    if (dSensors[0]->getValue()<2000)
     {
       return true;
     }
@@ -144,7 +148,7 @@ bool is_wall(char x)
   }
   else if (x=='f')
   {
-    if (dSensors[2]->getValue()<4000)
+    if (dSensors[2]->getValue()<2000)
     {
       return true;
     }
@@ -152,40 +156,55 @@ bool is_wall(char x)
   }
   else
   {
-    if (dSensors[1]->getValue()<4000)
+    if (dSensors[1]->getValue()<2000)
     {
       return true;
     }
     return false;
   }
+}
+
+void turning(double angle){
+  std::cout << dSensors[0]->getValue() << " , " << dSensors[1]->getValue() << " , " << dSensors[2]->getValue() << std::endl;
+  std::cout << "Position1: " << pSensors[0]->getValue() << " , " << pSensors[1]->getValue() << std::endl;
+  motion::init_turn(motors, angle);
+	while(robot->step(TIME_STEP) != -1){
+		if (motion::turn_flag){
+			motion::turn(motors, gyro);
+		}
+		else{
+			break;
+		}
+	}
+
+  if (std::abs(angle) == 90 * 3.14/180){
+    //forward(50);
+    std::cout << "Position: " << pSensors[0]->getValue() << " , " << pSensors[1]->getValue() << std::endl;
+  }
+
+  std::cout << "turning complete" << std::endl;
 }
 
 void unit()
 {
-  forward();
-  if (not(is_wall('l')))
+  forward(370);
+  if (!(is_wall('l')))
   {
-    turning(-90);
+    turning(90 * 3.14/180);
     return;
   }
-  else if (not(is_wall('f')))
+  else if (!(is_wall('f')))
   {
     return;
   }
-  else if (not(is_wall('r')))
+  else if (!(is_wall('r')))
   {
-    turning(90);
+    turning(-90 * 3.14/180);
     return;
   } 
   else
   {
-    turning(90);
-    turning(90);
+    turning(180 * 3.14/180);
     return;
   } 
-}
-
-void turning(int theta)
-{
-  return;
 }
