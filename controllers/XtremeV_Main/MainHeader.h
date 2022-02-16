@@ -55,7 +55,7 @@ namespace motion{
     void turn(Motor** motors, Gyro* gyro);
     void start_motors(Motor** motors, double speed, int mode);
     void stop_motors(Motor** motors);
-    void forward(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, int distance);
+    void lineFollowerForward(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, int distance);
     void stop(Motor** motors);
     bool is_wall(DistanceSensor** dSensors, char x);
     void turning(Robot* robot, Motor** motors, Gyro* gyro, double angle);

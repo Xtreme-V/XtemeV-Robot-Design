@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 			if (IR_Values == "00000000" && dSensors[0]->getValue() < 4000 && dSensors[1]->getValue() < 4000){
 				std::cout << dSensors[0]->getValue() << " & " << dSensors[1]->getValue() << " : " << "Line following sequence is finished" << std::endl;
 				overall_state = 1;
-				motion::forward(robot, motors, pSensors, dSensors, 185);
+				motion::lineFollowerForward(robot, motors, pSensors, dSensors, 185);
 				break;
 			}
 

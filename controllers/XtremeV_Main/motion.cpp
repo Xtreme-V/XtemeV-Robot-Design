@@ -63,7 +63,7 @@ double motion::increase_speed(double ref_speed, double offset){
   return std::min( std::max( ref_speed + offset, -1*(double)MAX_SPEED ), (double)MAX_SPEED );
 }
 
-void motion::forward(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, int distance)
+void motion::lineFollowerForward(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, int distance)
 {
   //variables for PID
   double Kp = 10;
@@ -170,7 +170,7 @@ void motion::turning(Robot* robot, Motor** motors, Gyro* gyro, double angle){
 
 void motion::unit(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, Gyro* gyro)
 {
-  motion::forward(robot, motors, pSensors, dSensors, 370);
+  motion::lineFollowerForward(robot, motors, pSensors, dSensors, 370);
   if (!(motion::is_wall(dSensors, 'l')))
   {
     motion::turning(robot, motors, gyro, 90 * 3.14/180);
