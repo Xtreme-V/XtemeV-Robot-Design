@@ -20,8 +20,11 @@
 #define KP 1.0
 #define KI 0
 #define KD 0.5
+#define OBJ_KP 1.5
+#define OBJ_KD 0.1
+#define CAMERA_WIDTH 64
 
-#define print(x)  cout << #x": " << x << "\n";
+#define XV_print(x)  cout << #x": " << x << "\n";
 
 using namespace webots;
 using namespace std;
@@ -62,6 +65,11 @@ namespace motion{
     void unit(Robot* robot, Motor** motors, PositionSensor** pSensors, DistanceSensor** dSensors, Gyro* gyro);
     void align_to_walls(Robot* robot, Motor** motors, DistanceSensor** dSensors);
     double increase_speed(double ref_speed, double offset);
+}
+
+namespace objDetect
+{
+    void followObject(Motor **motors, double obj_x, double obj_y, double *obj_prevError, bool *arrived);
 }
 
 #endif

@@ -38,11 +38,11 @@ namespace lineFollow
         
         error = position/(count * 10);   
         *integral += error;
-        print(error)
+        XV_print(error)
         
         correction = KP * error + KI * (*integral) + KD*(error - *prevError); //calculating the correction
         
-        // print(correction)
+        // XV_print(correction)
         double leftSpeed = NORMAL_SPEED + correction;
         double rightSpeed = NORMAL_SPEED - correction; 
         

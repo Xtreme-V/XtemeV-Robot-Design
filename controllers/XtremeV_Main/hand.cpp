@@ -20,10 +20,7 @@ namespace hand
                 *current_hand_position-=1;    
             } 
             else
-            {
                 break;
-            }      
-
         } 
 
     }  
