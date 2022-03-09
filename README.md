@@ -28,8 +28,22 @@ collected ball into the goal.
 ## Robot Design
 <br>
 <p align="center">
-    <img src="images/robot.PNG" alt="drawing" width="600" height ="300"/>
+    <img src="images/robot.png" alt="drawing" width="500" height ="350"/>
 </p>
 <br>
 
+### Components that are being used in our robot are as follows,
+- Pololu motors 
+- N20 motors
+- IR panel (QTR - 8RC)
+- Ultrasonic Sensor (HC-SR04)
+- Raspberry Pi Camera
+- Raspberry Pi 3B+
+- Arduino Mega
+- Motor Controller (L298N)
 ## Team Members
+- [K. D. Supun Dasantha Kuruppu](https://github.com/SupunDK)
+- [W. M. Limalka Sadith](https://github.com/limalkasadith)
+- [Sithuruwan Prathapasinghe](https://github.com/PrathapasingheSP99)
+- [E. M. Dumindu Ashen Bandara](https://github.com/Dumindu-Bandara)
+- [Biyon Fernando](https://github.com/BiyonFernando)
