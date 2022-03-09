@@ -19,5 +19,17 @@ the start of the competition.
 5. Shooting area
     - The robot must choose the correct path at the Y junction area according to the assigned color. While staying in the restricted space, the robot will have to shoot the
 collected ball into the goal.
+<br>
+<p align="center">
+    <img src="images/sample_arena.PNG" alt="drawing" width="600" height ="300"/>
+</p>
+<br>
 
-![sample_arena](images/sample_arena.png)
+## Robot Design
+<br>
+<p align="center">
+    <img src="images/robot.PNG" alt="drawing" width="600" height ="300"/>
+</p>
+<br>
+
+## Team Members
